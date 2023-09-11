@@ -100,6 +100,7 @@ import {
   addDoc,
   updateDoc,
   onSnapshot,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { useParams, useNavigate } from "react-router-dom";
@@ -116,7 +117,7 @@ export default function Notas() {
 
   useEffect(() => {
     async function loadNotas() {
-      const listRef = onSnapshot(collection(db, "notas"), (snapshot) => {
+      const listRef = onSnapshot(collection(db, "usuarios"), (snapshot) => {
         let listaNota = [];
 
         snapshot.forEach((doc) => {
@@ -133,16 +134,83 @@ export default function Notas() {
   }, []);
 
   async function handleAdd() {
-    await addDoc(collection(db, "notas"), {
+    await addDoc(collection(db, "usuarios"), {
       titulo: titulo,
       notas: notas,
     })
       .then(() => {
         console.log("Notas Salva");
-        setNotas([]), setTitulo("");
+        setIdNotas("");
+        setNotas("");
+        setTitulo("");
       })
       .catch((error) => {
         console.log("erro" + error);
       });
   }
+
+  async function buscarNotas() {
+    const notasRef = collection(db, "usuarios");
+    await getDocs(notasRef)
+      .then((snapshot) => {
+        let lista = [];
+
+        snapshot.forEach((doc) => {
+          lista.push({
+            id: doc.id,
+            titulo: doc.data().titulo,
+            notas: doc.data().notas,
+          });
+        });
+        setNotas(lista);
+      })
+      .catch((error) => {
+        console.log("Deu algum erro");
+      });
+  }
+  async function editarNotas() {
+    const docRef = doc(db, "usuarios", id);
+
+    await updateDoc(docRef, {
+      titulo: titulo,
+      notas: notas,
+    })
+      .then(() => {
+        console.log("Notas Atualizado");
+        setIdNotas("");
+        setTitulo("");
+        setNotas("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  async function excluirNotas(id) {
+    const docRef = doc(db, "usuarios", id);
+    await deleteDoc(docRef).then(() => {
+      alert("Post deletado");
+    });
+  }
+  return (
+    <div className="note new">
+      <label>Titulo</label>
+      <input
+        type="text"
+        placeholder="Digite o titulo"
+        value={titulo}
+        onChange={(e) => setTitulo(e.target.value)}
+      />
+      <label>Escreva sua nota</label>
+      <input
+        placeholder="Clique para escrever..."
+        value={notas}
+        onChange={(e) => setNotas(e.target.value)}
+      />
+      <div className="note-footer">
+        <button onClick={handleAdd}>Cadastrar</button>
+        <button onClick={buscarNotas}>Buscar</button>
+        <button onClick={editarNotas}>Atualizar</button>
+      </div>
+    </div>
+  );
 }
