@@ -114,6 +114,7 @@ export default function Notas() {
   const [notas, setNotas] = useState([]);
   const [idNotas, setIdNotas] = useState("");
   const [titulo, setTitulo] = useState("");
+  const [texto, setTexto] = useState("");
 
   useEffect(() => {
     async function loadNotas() {
@@ -126,8 +127,10 @@ export default function Notas() {
             titulo: doc.data().titulo,
             notas: doc.data().notas,
           });
+          console.log(doc.data());
         });
         setNotas(listaNota);
+        console.log(notas);
       });
     }
     loadNotas();
@@ -136,12 +139,11 @@ export default function Notas() {
   async function handleAdd() {
     await addDoc(collection(db, "usuarios"), {
       titulo: titulo,
-      notas: notas,
+      notas: texto,
     })
       .then(() => {
         console.log("Notas Salva");
-        setIdNotas("");
-        setNotas("");
+        setTexto("");
         setTitulo("");
       })
       .catch((error) => {
@@ -168,18 +170,18 @@ export default function Notas() {
         console.log("Deu algum erro");
       });
   }
-  async function editarNotas() {
+  async function editarNotas(id) {
     const docRef = doc(db, "usuarios", id);
 
     await updateDoc(docRef, {
       titulo: titulo,
-      notas: notas,
+      notas: texto,
     })
       .then(() => {
         console.log("Notas Atualizado");
         setIdNotas("");
         setTitulo("");
-        setNotas("");
+        setTexto("");
       })
       .catch((error) => {
         console.log(error);
@@ -203,13 +205,25 @@ export default function Notas() {
       <label>Escreva sua nota</label>
       <input
         placeholder="Clique para escrever..."
-        value={notas}
-        onChange={(e) => setNotas(e.target.value)}
+        value={texto}
+        onChange={(e) => setTexto(e.target.value)}
       />
       <div className="note-footer">
         <button onClick={handleAdd}>Cadastrar</button>
         <button onClick={buscarNotas}>Buscar</button>
-        <button onClick={editarNotas}>Atualizar</button>
+        <button onClick={e=>editarNotas(id,e)}>Atualizar</button>
+      </div>
+      <div>
+        {notas.map((notas) => {
+            return(
+            <li key={notas.id}>
+              <strong> ID: {notas.id}</strong>
+              <span>Titulo: {notas.titulo}</span>
+              <span>Texto: {notas.texto}</span>
+              <button onClick={() => excluirNotas(notas.id)}>Excluir</button>
+            </li>
+          
+        )})}
       </div>
     </div>
   );
