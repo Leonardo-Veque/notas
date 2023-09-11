@@ -39,13 +39,13 @@ function AuthProvider({ children }) {
 
     await signInWithEmailAndPassword(auth, email, password)
       .then(async (value) => {
-        let uid = value.user.id;
+        let uid = value.user.uid;
 
         const docRef = doc(db, "users", uid);
         const docSnap = await getDoc(docRef);
 
         let data = {
-          uid: id,
+          uid: uid,
           nome: docSnap.data().nome,
           email: value.user.email,
         };
@@ -54,6 +54,7 @@ function AuthProvider({ children }) {
         storageUser(data);
         setloadingAuth(false);
         toast.success("Bem vindo(a) de volta");
+        navigate("/notas");
       })
       .catch((error) => {
         console.log(error);
