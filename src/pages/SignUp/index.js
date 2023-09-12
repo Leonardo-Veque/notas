@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import "./index.css";
 
 import { AuthContext } from "../../contexts/auth";
 
@@ -19,36 +20,47 @@ export default function SignUp() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <h1>Nova conta</h1>
-        <input
-          type="text"
-          placeholder="Seu nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+    <div className="body">
+      <div id="form">
+        <form onSubmit={handleSubmit}>
+          <h1 className="title">Cadastrar</h1>
 
-        <input
-          type="text"
-          placeholder="email@email.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <label>Nome</label>
+          <input
+            className="input"
+            type="text"
+            placeholder="Seu nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="********"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <label>Email</label>
+          <input
+            className="input"
+            type="text"
+            placeholder="Email por favor"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <button type="submit">
-          {loadingAuth ? "Carregando..." : "Cadastrar"}
-        </button>
-      </form>
+          <label>Password</label>
+          <input
+            className="input"
+            type="password"
+            placeholder="********"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-      <Link to="/">Já possui uma conta? Faça login</Link>
+          <button type="submit" id="btn">
+            {loadingAuth ? "Carregando..." : "Cadastrar"}
+          </button>
+        </form>
+
+        <Link to="/" className="link">
+          Já possui uma conta? Faça login
+        </Link>
+      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Header from "../../components/Header";
+import { MdDeleteForever } from "react-icons/md";
 
 import { useState, useEffect, useContext } from "react";
 import { FiPlusCircle } from "react-icons/fi";
@@ -56,6 +57,7 @@ export default function Notas() {
     })
       .then(() => {
         console.log("Notas Salva");
+        toast.success("Nota Salva Senhor");
         setTexto("");
         setTitulo("");
       })
@@ -75,22 +77,28 @@ export default function Notas() {
     <div className="container">
       <Header />
       <div className="notes-list">
-        <div className="note">
-          {notas.map((notas) => {
-            return (
-              <div key={notas.id}>
-                <span> {notas.titulo}</span>
-                <span>{notas.notas}</span>
-                <button onClick={() => excluirNotas(notas.id)}>Excluir</button>
+        {notas.map((nota) => {
+          return (
+            <div className="note">
+              <div key={nota.id}>
+                <h2>
+                  <span>Titulo: {nota.titulo}</span>
+                </h2>
+                <span>Recado: {nota.notas}</span>
                 <div className="note-footer">
                   <button>
-                    <a href={`editar/${notas.id}`}>Vizualizar</a>
+                    <a href={`editar/${nota.id}`}>Vizualizar</a>
                   </button>
+                  <MdDeleteForever
+                    className="delete-icon"
+                    onClick={() => excluirNotas(nota.id)}
+                    size="2em"
+                  />
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
         <div className="note-new">
           <input
             type="text"

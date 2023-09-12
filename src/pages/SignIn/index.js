@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import "./index.css";
+import "../SignUp/index.css";
 
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/auth";
@@ -19,28 +19,35 @@ export default function SignIn() {
   }
 
   return (
-    <div>
-      <form onSubmit={handleSignIn}>
-        <h1>Entrar</h1>
+    <div className="body">
+      <form onSubmit={handleSignIn} id="form">
+        <h1 className="title">Entrar</h1>
+
+        <label>Email</label>
         <input
+          className="input"
           type="text"
           placeholder="email@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
+        <label>Password</label>
         <input
+          className="input"
           type="password"
           placeholder="********"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit">
+        <button type="submit" id="btn">
           {loadingAuth ? "Carregando..." : "Acessar"}
         </button>
+        <Link to="/register" className="link">
+          Criar uma conta
+        </Link>
       </form>
-      <Link to="/register">Criar uma conta</Link>
     </div>
   );
 }
