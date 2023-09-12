@@ -5,6 +5,7 @@ import SignUp from "../pages/SignUp";
 import Notas from "../pages/Notas";
 
 import Private from "./Private";
+import Editar from "../pages/Editar";
 
 function RoutesApp() {
   return (
@@ -17,6 +18,14 @@ function RoutesApp() {
         element={
           <Private>
             <Notas />
+          </Private>
+        }
+      />
+      <Route
+        path="/editar/:id"
+        element={
+          <Private>
+            <Editar />
           </Private>
         }
       />
